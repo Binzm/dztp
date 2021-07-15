@@ -754,31 +754,39 @@ namespace AlbbData
                 HtmlAgilityPack.HtmlNodeCollection nodecollection = htmlNode.ChildNodes[1].ChildNodes;
                 if (nodecollection.Count > 0)
                 {
-                    var htmlCity = doc.DocumentNode.SelectSingleNode("//div[@class='J-current-city']");
+                    var htmlCity = doc.DocumentNode.SelectSingleNode("//span[@itemprop='title']");
                     for (int i = 0; i < nodecollection.Count; i++)
                     {
                         if (nodecollection[i].ChildNodes.Count > 0)
                         {
-                            string numDistcussCountStr = nodecollection[1].ChildNodes[3].ChildNodes[3].ChildNodes[3].InnerHtml;
+                            string numDistcussCountStr = nodecollection[1].ChildNodes[3].ChildNodes[3].ChildNodes[3].InnerHtml;//评论数处理
                             if (numDistcussCountStr != null)
                             {
                                 DealNumDistcuss(ref numDistcussCountStr);
+                            }
+                            string priceStr = nodecollection[1].ChildNodes[3].ChildNodes[3].ChildNodes[7].InnerHtml;//人均消费处理
+                            if (priceStr != null)
+                            {
+                                DealPriceDistcuss(ref priceStr);
                             }
 
                             string cityStr = "";
                             if (htmlCity != null)
                             {
-                                cityStr = htmlCity.InnerText;
+                                cityStr = htmlCity.InnerText.Replace("\n","").Trim();
+                                cityStr = cityStr.Replace(_thisSearchTypeName, "");
                             }
 
                             ShopInfoEntity tempshwoinfo = new ShopInfoEntity
                             {
                                 Name = nodecollection[i].ChildNodes[3].ChildNodes[1].ChildNodes[1].ChildNodes[1].InnerText,
                                 ShopScore = nodecollection[1].ChildNodes[3].ChildNodes[3].ChildNodes[1].InnerText.Replace
-                                    ("\n", ""),
+                                    ("\n", "").Trim(),
                                 DetailNavUrl = GetHrefByAStr(nodecollection[i].ChildNodes[3].ChildNodes[1].ChildNodes[1].OuterHtml),
                                 DiscussCount = numDistcussCountStr,
-                               City = cityStr
+                               City = cityStr,
+                               ShopType = _thisSearchTypeName
+
                             };
                             if (!Global.ResultList.Exists(f =>
                                 f.Name == tempshwoinfo.Name && f.DetailNavUrl == tempshwoinfo.DetailNavUrl))
@@ -793,6 +801,40 @@ namespace AlbbData
                     }
                     Console.WriteLine($"当前获取数据条数：{_usingNavList.Count}");
                 }
+            }
+        }
+
+        private void DealPriceDistcuss(ref string numDistcussCountStr)
+        {
+            //"\n            人均\n            <b>￥<svgmtsi class=\"shopNum\"></svgmtsi><svgmtsi class=\"shopNum\"></svgmtsi></b>\n            \n         numDistcussCountStr = numDistcussCountStr.Substring(numDistcussCountStr.IndexOf("<b>"));
+            numDistcussCountStr = numDistcussCountStr.Replace("人均", "");
+            numDistcussCountStr = numDistcussCountStr.Replace("</b>", "");
+            numDistcussCountStr = numDistcussCountStr.Replace("<b>", "");
+            numDistcussCountStr = numDistcussCountStr.Replace("\n", "").Trim();
+            numDistcussCountStr = numDistcussCountStr.Replace("<svgmtsi class=\"shopNum\">", "");
+            numDistcussCountStr = numDistcussCountStr.Replace("</svgmtsi>", "");
+            numDistcussCountStr = numDistcussCountStr.Replace("￥", "");
+            var oneIndex = numDistcussCountStr.IndexOf(Global.special);//数字为1特殊处理
+            if (oneIndex >= 0)
+            {
+                numDistcussCountStr = numDistcussCountStr.Replace("1", "");
+            }
+            string utf8Str = "";
+            for (int i = 0; i < numDistcussCountStr.Length; i++)
+            {
+                utf8Str += ConvertUtf(numDistcussCountStr.Substring(i, 1));
+            }
+
+            if (string.IsNullOrEmpty(utf8Str))
+            {
+                numDistcussCountStr = "";//异常置空值
+                return;
+            }
+            //todo 匹配字符转成成数字或者合理的中文
+
+            if (oneIndex >= 0)
+            {
+                numDistcussCountStr = numDistcussCountStr.Insert(oneIndex, Global.special);
             }
         }
 
