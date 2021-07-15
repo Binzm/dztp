@@ -1,0 +1,64 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+.vs/
+bin/
+obj/
+/Debug/
+**/Debug/**
+packages/
+/DXHTProject/bin/Debug/Log/LogError
+/DXHTProject/bin/Debug/file
+/DXHTProject/bin/Debug/jeeplus/userfiles/1/򸽼/design/2020/6
+/DXHTProject/bin/Debug/Log/LogInfo
+/DXHTProject/bin/Debug/tempFile/userfiles/image/admin/2021/2/22
+
+
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
