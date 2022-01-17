@@ -43,6 +43,9 @@ namespace AlbbData
         private List<ListUrlEntity> _listNav;
         private string _thisSearchTypeName;
 
+        private int _listSheepTime = 3000;
+        private int _detailSheepTime = 3000;
+
 
         //发布者
         BaggageHandler provider;
@@ -310,7 +313,7 @@ namespace AlbbData
                     _webview.GetMainFrame().EvaluateScriptAsync("window.scrollTo(0,document.body.scrollHeight);");//滚动到最底部
                     var t1 = Task.Run(async delegate
                     {
-                        await Task.Delay(3000);//页面加载完成时间
+                        await Task.Delay(500);//页面加载完成时间
                         ScollHeightBottomAndAsyncGetDataAndJumpNextPage();
                     });
                     _initListPageNav.Number++;
@@ -318,18 +321,14 @@ namespace AlbbData
                 }
                 else
                 {
-                    AsyncGetDataAndJumpNextPage();
+                    GetData();
                     _initListPageNav.Number = 0;
                 }
             }
 
         }
 
-        private void AsyncGetDataAndJumpNextPage()
-        {
-            GetData();
-        }
-
+     
 
 
         /// <summary>
@@ -712,7 +711,7 @@ namespace AlbbData
 
             var t = Task.Run(async delegate
                 {
-                    //await Task.Delay(2000);//页面加载完成时间，看网速，这里后期可能需要调整
+                    await Task.Delay(_listSheepTime);//页面加载完成时间，看网速，这里后期可能需要调整
                     //System.Threading.Thread.Sleep(3000);
                     var reslut = CefProxyOptions.NextPageJs(_webview);//如果真实跳转了下一页
                     if (reslut)

@@ -17,6 +17,7 @@ namespace ArchitectureDesignSafety
         }
         public static ChromiumWebBrowser CreateSingleCookie(string url, string userName)
         {
+
             RequestContextSettings requestContextSettings = new RequestContextSettings
             {
                 PersistSessionCookies = false,
@@ -47,37 +48,6 @@ namespace ArchitectureDesignSafety
             //var browser = new ChromiumWebBrowser(url, context); 
             #endregion
             return browser;
-
-            //RequestContextSettings requestContextSettings = new RequestContextSettings
-            //{
-            //    PersistSessionCookies = false,
-            //    PersistUserPreferences = false,
-            //    CachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CefSharp\\Cache_" + userName)
-            //};
-            //var browser = new ChromiumWebBrowser(url)
-            //{
-            //    RequestContext = new RequestContext(requestContextSettings)
-            //};
-            //#region 暂时无用
-            ////string name = new Random().Next(100000).ToString();
-            ////var setting = new RequestContextSettings()
-            ////{
-            ////    CachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CefSharp\\Cache_" + name),
-            ////    PersistSessionCookies = true,
-            ////    PersistUserPreferences = true
-            ////};
-            ////var context = new RequestContext(setting);
-            ////var cookieManager = context.GetCookieManager(null);
-            //////这样设置的cookie不是全局的，只有当前browser才能访问
-            ////cookieManager.SetCookie("domain", new Cookie
-            ////{
-            ////    Name = "cookiename",
-            ////    Value = "cookievalue",
-            ////    Path = "/"
-            ////});
-            ////var browser = new ChromiumWebBrowser(url, context); 
-            //#endregion
-            //return browser;
         }
 
         public static async Task EvaluateJavascript(string script, ChromiumWebBrowser Browser)
